@@ -11,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { ChevronDown, ChevronUp, Home } from "lucide-react";
+import { ChevronDown, ChevronUp, Home, Menu, X } from "lucide-react";
 
 const fetchHealthcareStats = async () => {
   try {
@@ -96,23 +96,30 @@ const fetchHealthcareStats = async () => {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-black">
       <header className="bg-blue-800 text-white p-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl md:text-2xl font-bold">
             Rural Healthcare Workforce Analysis
           </h1>
-          <nav>
-            <ul className="flex space-x-6">
+          <button
+            className="md:hidden p-1"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          <nav className="hidden md:block">
+            <ul className="flex space-x-2 md:space-x-6">
               <li
                 className={`cursor-pointer ${
                   activeTab === "home" ? "border-b-2 border-white" : ""
                 }`}
                 onClick={() => setActiveTab("home")}
               >
-                <div className="flex items-center">
+                <div className="flex items-center text-sm md:text-base">
                   <Home size={16} className="mr-1" /> Home
                 </div>
               </li>
@@ -122,7 +129,7 @@ export default function App() {
                 }`}
                 onClick={() => setActiveTab("analysis")}
               >
-                Analysis
+                <span className="text-sm md:text-base">Analysis</span>
               </li>
               <li
                 className={`cursor-pointer ${
@@ -130,7 +137,7 @@ export default function App() {
                 }`}
                 onClick={() => setActiveTab("solutions")}
               >
-                Solutions
+                <span className="text-sm md:text-base">Solutions</span>
               </li>
               <li
                 className={`cursor-pointer ${
@@ -138,14 +145,68 @@ export default function App() {
                 }`}
                 onClick={() => setActiveTab("data")}
               >
-                Data
+                <span className="text-sm md:text-base">Data</span>
               </li>
             </ul>
           </nav>
         </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden mt-4">
+            <ul className="space-y-2">
+              <li
+                className={`p-2 cursor-pointer ${
+                  activeTab === "home" ? "bg-blue-700 rounded" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("home");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <div className="flex items-center">
+                  <Home size={16} className="mr-2" /> Home
+                </div>
+              </li>
+              <li
+                className={`p-2 cursor-pointer ${
+                  activeTab === "analysis" ? "bg-blue-700 rounded" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("analysis");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Analysis
+              </li>
+              <li
+                className={`p-2 cursor-pointer ${
+                  activeTab === "solutions" ? "bg-blue-700 rounded" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("solutions");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Solutions
+              </li>
+              <li
+                className={`p-2 cursor-pointer ${
+                  activeTab === "data" ? "bg-blue-700 rounded" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("data");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Data
+              </li>
+            </ul>
+          </div>
+        )}
       </header>
 
-      <main className="flex-grow container mx-auto p-4 md:p-6">
+      <main className="flex-grow container mx-auto p-2 md:p-4 lg:p-6">
         {activeTab === "home" && <HomePage />}
         {activeTab === "analysis" && <AnalysisPage />}
         {activeTab === "solutions" && <SolutionsPage />}
@@ -154,8 +215,10 @@ export default function App() {
 
       <footer className="bg-blue-900 text-white p-4">
         <div className="container mx-auto text-center">
-          <p>© 2025 Rural Healthcare Systems Analysis</p>
-          <p className="text-sm mt-1">
+          <p className="text-sm md:text-base">
+            © 2025 Rural Healthcare Systems Analysis
+          </p>
+          <p className="text-xs md:text-sm mt-1">
             Data sources: World Bank API, Indian Government Health Reports
           </p>
         </div>
@@ -166,19 +229,19 @@ export default function App() {
 
 function HomePage() {
   return (
-    <div className="space-y-8">
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+    <div className="space-y-4 md:space-y-8">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           Rural Healthcare Workforce Shortage in India
         </h2>
         <div className="prose max-w-none">
-          <p className="text-lg">
+          <p className="text-base md:text-lg">
             Rural India faces a persistent shortage of trained healthcare
             workers despite various government incentives and programs. This
             shortage affects approximately 70% of India's population but has
             access to less than 30% of the country's doctors.
           </p>
-          <p className="mt-4">
+          <p className="mt-2 md:mt-4 text-sm md:text-base">
             The WHO recommends a doctor-to-population ratio of 1:1,000, but
             rural India's ratio hovers around 1:10,000 in many states. This
             analysis applies systems thinking to understand why this problem
@@ -187,33 +250,35 @@ function HomePage() {
         </div>
       </section>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <section className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-bold mb-3 text-blue-800">Key Findings</h3>
-          <ul className="space-y-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+          <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-blue-800">
+            Key Findings
+          </h3>
+          <ul className="space-y-1 md:space-y-2">
             <li className="flex items-start">
               <span className="text-blue-600 mr-2">•</span>
-              <span>
+              <span className="text-sm md:text-base">
                 Powerful reinforcing feedback loops maintain workforce shortages
               </span>
             </li>
             <li className="flex items-start">
               <span className="text-blue-600 mr-2">•</span>
-              <span>
+              <span className="text-sm md:text-base">
                 Current interventions often target symptoms, not structural
                 causes
               </span>
             </li>
             <li className="flex items-start">
               <span className="text-blue-600 mr-2">•</span>
-              <span>
+              <span className="text-sm md:text-base">
                 Medical education, professional isolation, and living conditions
                 are key drivers
               </span>
             </li>
             <li className="flex items-start">
               <span className="text-blue-600 mr-2">•</span>
-              <span>
+              <span className="text-sm md:text-base">
                 Long-term structural changes offer the highest leverage for
                 improvement
               </span>
@@ -221,22 +286,26 @@ function HomePage() {
           </ul>
         </section>
 
-        <section className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-bold mb-4 text-blue-800">
+        <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+          <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-blue-800">
             Physician Density in India (per 1,000 people)
           </h3>
-          <RealTimeDataChart />
+          <div className="h-64 md:h-72">
+            <RealTimeDataChart />
+          </div>
         </section>
       </div>
 
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-xl font-bold mb-4 text-blue-800">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-blue-800">
           System Dynamics Diagram
         </h3>
-        <div className="bg-gray-100 p-4 rounded border border-gray-300">
-          <CausalLoopDiagram />
+        <div className="bg-gray-100 p-2 md:p-4 rounded border border-gray-300 overflow-x-auto">
+          <div className="min-w-[600px]">
+            <CausalLoopDiagram />
+          </div>
         </div>
-        <p className="mt-4 text-sm text-gray-600">
+        <p className="mt-2 md:mt-4 text-xs md:text-sm text-gray-600">
           The Causal Loop Diagram illustrates key variables and relationships
           perpetuating rural healthcare workforce shortages.
         </p>
@@ -247,62 +316,68 @@ function HomePage() {
 
 function AnalysisPage() {
   return (
-    <div className="space-y-8">
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+    <div className="space-y-4 md:space-y-8">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           System Narrative
         </h2>
         <div className="prose max-w-none">
-          <p>
+          <p className="text-sm md:text-base">
             The Causal Loop Diagram illustrates the key variables and
             relationships perpetuating rural healthcare workforce shortages:
           </p>
 
-          <h3 className="text-lg font-semibold mt-4">Core Variables:</h3>
-          <p>
+          <h3 className="text-base md:text-lg font-semibold mt-3 md:mt-4">
+            Core Variables:
+          </h3>
+          <p className="text-sm md:text-base">
             Rural Healthcare Workforce, Working Conditions, Workload per HCW,
             Urban Migration, Quality of Healthcare, Professional Isolation,
             Government Incentives
           </p>
 
-          <h3 className="text-lg font-semibold mt-4">Key Relationships:</h3>
-          <ul>
+          <h3 className="text-base md:text-lg font-semibold mt-3 md:mt-4">
+            Key Relationships:
+          </h3>
+          <ul className="text-sm md:text-base space-y-1">
             <li>
-              Rural Healthcare Workforce → Quality of Rural Healthcare (+): More
-              workers improve care quality
+              • Rural Healthcare Workforce → Quality of Rural Healthcare (+):
+              More workers improve care quality
             </li>
             <li>
-              Urban Migration → Rural Healthcare Workforce (-): Migration
+              • Urban Migration → Rural Healthcare Workforce (-): Migration
               reduces available workforce
             </li>
             <li>
-              Rural Healthcare Workforce → Workload per HCW (-): Fewer workers
+              • Rural Healthcare Workforce → Workload per HCW (-): Fewer workers
               means higher workload
             </li>
             <li>
-              Working Conditions → Urban Migration (+): Poor conditions drive
+              • Working Conditions → Urban Migration (+): Poor conditions drive
               migration
             </li>
             <li>
-              Professional Isolation → Urban Migration (+): Isolation pushes
+              • Professional Isolation → Urban Migration (+): Isolation pushes
               workers to urban areas
             </li>
           </ul>
 
-          <h3 className="text-lg font-semibold mt-4">Feedback Loops:</h3>
-          <ul>
+          <h3 className="text-base md:text-lg font-semibold mt-3 md:mt-4">
+            Feedback Loops:
+          </h3>
+          <ul className="text-sm md:text-base space-y-1">
             <li>
-              <strong>R1: Workforce Decline Loop (Reinforcing):</strong> Fewer
+              • <strong>R1: Workforce Decline Loop (Reinforcing):</strong> Fewer
               workers → Higher workload → Worse working conditions → Increased
               migration → Even fewer workers
             </li>
             <li>
-              <strong>R2: Healthcare Quality Loop (Reinforcing):</strong> Lower
-              workforce → Lower quality → Poorer outcomes → Lower living
+              • <strong>R2: Healthcare Quality Loop (Reinforcing):</strong>{" "}
+              Lower workforce → Lower quality → Poorer outcomes → Lower living
               standards → More migration → Lower workforce
             </li>
             <li>
-              <strong>B1: Government Intervention (Balancing):</strong> Lower
+              • <strong>B1: Government Intervention (Balancing):</strong> Lower
               workforce → More government incentives → (Attempts to increase)
               workforce
             </li>
@@ -310,13 +385,16 @@ function AnalysisPage() {
         </div>
       </section>
 
-      <section id="eps-analysis" className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+      <section
+        id="eps-analysis"
+        className="bg-white p-4 md:p-6 rounded-lg shadow-md"
+      >
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           Event-Pattern-Structure Analysis
         </h2>
 
         <ExpandableSection title="Events (Visible Symptoms)">
-          <ul className="pl-6 space-y-1">
+          <ul className="pl-4 md:pl-6 space-y-1 text-sm md:text-base">
             <li>• Vacant doctor positions in Primary Health Centers</li>
             <li>• High absenteeism among posted rural healthcare workers</li>
             <li>• Doctors abandoning rural postings before completing terms</li>
@@ -327,7 +405,7 @@ function AnalysisPage() {
         </ExpandableSection>
 
         <ExpandableSection title="Patterns (Recurring Trends)">
-          <ul className="pl-6 space-y-1">
+          <ul className="pl-4 md:pl-6 space-y-1 text-sm md:text-base">
             <li>• Cyclical migrations from rural to urban areas</li>
             <li>• Consistent failure of incentive programs</li>
             <li>• Growing disparity in healthcare access</li>
@@ -338,10 +416,10 @@ function AnalysisPage() {
         </ExpandableSection>
 
         <ExpandableSection title="Structures (Root Causes)">
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4 text-sm md:text-base">
             <div>
               <h4 className="font-semibold">Education System Structure</h4>
-              <ul className="pl-6">
+              <ul className="pl-4 md:pl-6 mt-1">
                 <li>• Urban-centric medical education</li>
                 <li>• High costs driving need for high-return careers</li>
                 <li>
@@ -353,7 +431,7 @@ function AnalysisPage() {
 
             <div>
               <h4 className="font-semibold">Career & Professional Structure</h4>
-              <ul className="pl-6">
+              <ul className="pl-4 md:pl-6 mt-1">
                 <li>• Limited professional development in rural settings</li>
                 <li>• Professional isolation from peers and mentors</li>
                 <li>• Higher economic returns in urban practice</li>
@@ -364,7 +442,7 @@ function AnalysisPage() {
               <h4 className="font-semibold">
                 Infrastructure & Resource Structure
               </h4>
-              <ul className="pl-6">
+              <ul className="pl-4 md:pl-6 mt-1">
                 <li>• Poor housing and amenities for healthcare workers</li>
                 <li>• Inadequate clinical infrastructure and supplies</li>
                 <li>• Limited technology and diagnostic equipment</li>
@@ -373,7 +451,7 @@ function AnalysisPage() {
 
             <div>
               <h4 className="font-semibold">Social & Cultural Structure</h4>
-              <ul className="pl-6">
+              <ul className="pl-4 md:pl-6 mt-1">
                 <li>• Cultural preference for urban lifestyles</li>
                 <li>• Social prestige of urban specialties</li>
                 <li>• Family resistance to rural postings</li>
@@ -383,37 +461,37 @@ function AnalysisPage() {
         </ExpandableSection>
       </section>
 
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           System Archetypes
         </h2>
 
-        <div className="space-y-4">
-          <div className="p-4 border border-blue-100 rounded bg-blue-50">
+        <div className="space-y-3 md:space-y-4">
+          <div className="p-3 border border-blue-100 rounded bg-blue-50">
             <h3 className="font-semibold text-blue-800">
               "Success to the Successful"
             </h3>
-            <p>
+            <p className="text-sm md:text-base">
               Urban areas attract more healthcare workers, improving urban
               healthcare, which attracts even more workers, creating a widening
               gap.
             </p>
           </div>
 
-          <div className="p-4 border border-blue-100 rounded bg-blue-50">
+          <div className="p-3 border border-blue-100 rounded bg-blue-50">
             <h3 className="font-semibold text-blue-800">"Fixes that Fail"</h3>
-            <p>
+            <p className="text-sm md:text-base">
               Short-term incentives temporarily attract workers but fail to
               address structural issues, ultimately leading to turnover and
               continued shortages.
             </p>
           </div>
 
-          <div className="p-4 border border-blue-100 rounded bg-blue-50">
+          <div className="p-3 border border-blue-100 rounded bg-blue-50">
             <h3 className="font-semibold text-blue-800">
               "Shifting the Burden"
             </h3>
-            <p>
+            <p className="text-sm md:text-base">
               Relying on temporary staffing or mandatory service rather than
               addressing fundamental structural issues.
             </p>
@@ -424,63 +502,74 @@ function AnalysisPage() {
   );
 }
 
-// Solutions Page Component
 function SolutionsPage() {
   return (
-    <div className="space-y-8">
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+    <div className="space-y-4 md:space-y-8">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           Analysis of Existing Solutions
         </h2>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
+          <table className="min-w-full bg-white text-sm md:text-base">
             <thead className="bg-blue-100">
               <tr>
-                <th className="px-4 py-2 text-left">Intervention</th>
-                <th className="px-4 py-2 text-left">Level</th>
-                <th className="px-4 py-2 text-left">Effectiveness</th>
-                <th className="px-4 py-2 text-left">Limitations</th>
+                <th className="px-2 md:px-4 py-1 md:py-2 text-left">
+                  Intervention
+                </th>
+                <th className="px-2 md:px-4 py-1 md:py-2 text-left">Level</th>
+                <th className="px-2 md:px-4 py-1 md:py-2 text-left">
+                  Effectiveness
+                </th>
+                <th className="px-2 md:px-4 py-1 md:py-2 text-left">
+                  Limitations
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               <tr>
-                <td className="px-4 py-2">Salary bonuses</td>
-                <td className="px-4 py-2">Event</td>
-                <td className="px-4 py-2">Low-Medium</td>
-                <td className="px-4 py-2">
+                <td className="px-2 md:px-4 py-1 md:py-2">Salary bonuses</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Event</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Low-Medium</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">
                   Temporary fix that doesn't address professional isolation
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-2">Mandatory rural service</td>
-                <td className="px-4 py-2">Event</td>
-                <td className="px-4 py-2">Medium</td>
-                <td className="px-4 py-2">
+                <td className="px-2 md:px-4 py-1 md:py-2">
+                  Mandatory rural service
+                </td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Event</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Medium</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">
                   Creates resentment, high turnover after completion
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-2">Telemedicine</td>
-                <td className="px-4 py-2">Pattern</td>
-                <td className="px-4 py-2">Medium</td>
-                <td className="px-4 py-2">
+                <td className="px-2 md:px-4 py-1 md:py-2">Telemedicine</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Pattern</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Medium</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">
                   Helps with consultation but not procedures or emergencies
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-2">Rural medical colleges</td>
-                <td className="px-4 py-2">Structure</td>
-                <td className="px-4 py-2">High</td>
-                <td className="px-4 py-2">
+                <td className="px-2 md:px-4 py-1 md:py-2">
+                  Rural medical colleges
+                </td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Structure</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">High</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">
                   Long implementation timeframe, significant investment
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-2">Community health worker programs</td>
-                <td className="px-4 py-2">Structure</td>
-                <td className="px-4 py-2">Medium-High</td>
-                <td className="px-4 py-2">
+                <td className="px-2 md:px-4 py-1 md:py-2">
+                  Community health worker programs
+                </td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Structure</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">Medium-High</td>
+                <td className="px-2 md:px-4 py-1 md:py-2">
                   Limited scope of practice, supervision challenges
                 </td>
               </tr>
@@ -488,28 +577,28 @@ function SolutionsPage() {
           </table>
         </div>
 
-        <p className="mt-4 text-sm italic">
+        <p className="mt-3 text-xs md:text-sm italic">
           Most current interventions operate at the event or pattern level
           rather than addressing underlying structures, explaining their limited
           success.
         </p>
       </section>
 
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           Leverage Points for Intervention
         </h2>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
-            <h3 className="text-xl font-semibold text-blue-700">
+            <h3 className="text-lg md:text-xl font-semibold text-blue-700">
               High-Impact Structural Interventions
             </h3>
 
-            <div className="mt-3 space-y-4">
-              <div className="p-3 bg-blue-50 rounded-md">
+            <div className="mt-2 md:mt-3 space-y-3 md:space-y-4">
+              <div className="p-2 md:p-3 bg-blue-50 rounded-md">
                 <h4 className="font-semibold">Medical Education Reform</h4>
-                <ul className="pl-5 mt-1">
+                <ul className="pl-3 md:pl-5 mt-1 text-sm md:text-base">
                   <li>
                     • Establish rural medical colleges with local admission
                     priority
@@ -524,11 +613,11 @@ function SolutionsPage() {
                 </ul>
               </div>
 
-              <div className="p-3 bg-blue-50 rounded-md">
+              <div className="p-2 md:p-3 bg-blue-50 rounded-md">
                 <h4 className="font-semibold">
                   Rural Professional Ecosystem Development
                 </h4>
-                <ul className="pl-5 mt-1">
+                <ul className="pl-3 md:pl-5 mt-1 text-sm md:text-base">
                   <li>
                     • Create "Rural Health Career Pathways" with clear
                     progression
@@ -543,11 +632,11 @@ function SolutionsPage() {
                 </ul>
               </div>
 
-              <div className="p-3 bg-blue-50 rounded-md">
+              <div className="p-2 md:p-3 bg-blue-50 rounded-md">
                 <h4 className="font-semibold">
                   Family-Centered Support Systems
                 </h4>
-                <ul className="pl-5 mt-1">
+                <ul className="pl-3 md:pl-5 mt-1 text-sm md:text-base">
                   <li>
                     • Build quality housing and educational facilities for
                     families
@@ -560,16 +649,16 @@ function SolutionsPage() {
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-blue-700">
+            <h3 className="text-lg md:text-xl font-semibold text-blue-700">
               Medium-Impact Pattern Interventions
             </h3>
 
-            <div className="mt-3 space-y-4">
-              <div className="p-3 bg-blue-50 rounded-md">
+            <div className="mt-2 md:mt-3 space-y-3 md:space-y-4">
+              <div className="p-2 md:p-3 bg-blue-50 rounded-md">
                 <h4 className="font-semibold">
                   Technology-Enabled Rural Practice
                 </h4>
-                <ul className="pl-5 mt-1">
+                <ul className="pl-3 md:pl-5 mt-1 text-sm md:text-base">
                   <li>
                     • Implement telemedicine infrastructure connecting to
                     specialists
@@ -579,11 +668,11 @@ function SolutionsPage() {
                 </ul>
               </div>
 
-              <div className="p-3 bg-blue-50 rounded-md">
+              <div className="p-2 md:p-3 bg-blue-50 rounded-md">
                 <h4 className="font-semibold">
                   Professional Development Networks
                 </h4>
-                <ul className="pl-5 mt-1">
+                <ul className="pl-3 md:pl-5 mt-1 text-sm md:text-base">
                   <li>• Create regional hubs for continuing education</li>
                   <li>
                     • Establish mentorship programs with experienced specialists
@@ -596,17 +685,17 @@ function SolutionsPage() {
         </div>
       </section>
 
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-blue-800">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-blue-800">
           Implementation Priorities
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="p-4 border border-green-200 rounded bg-green-50">
-            <h3 className="font-semibold text-green-800">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+          <div className="p-3 md:p-4 border border-green-200 rounded bg-green-50">
+            <h3 className="font-semibold text-green-800 text-sm md:text-base">
               Short-term Actions (1-2 years)
             </h3>
-            <ul className="pl-5 mt-2 space-y-1">
+            <ul className="pl-3 md:pl-5 mt-1 md:mt-2 space-y-1 text-xs md:text-sm">
               <li>• Enhance financial incentives for existing practitioners</li>
               <li>• Deploy telemedicine infrastructure to reduce isolation</li>
               <li>• Improve basic housing and security</li>
@@ -614,11 +703,11 @@ function SolutionsPage() {
             </ul>
           </div>
 
-          <div className="p-4 border border-blue-200 rounded bg-blue-50">
-            <h3 className="font-semibold text-blue-800">
+          <div className="p-3 md:p-4 border border-blue-200 rounded bg-blue-50">
+            <h3 className="font-semibold text-blue-800 text-sm md:text-base">
               Medium-term Development (3-5 years)
             </h3>
-            <ul className="pl-5 mt-2 space-y-1">
+            <ul className="pl-3 md:pl-5 mt-1 md:mt-2 space-y-1 text-xs md:text-sm">
               <li>• Launch rural-focused tracks in existing institutions</li>
               <li>• Implement revised curricula with rural components</li>
               <li>• Establish regional excellence centers</li>
@@ -626,11 +715,11 @@ function SolutionsPage() {
             </ul>
           </div>
 
-          <div className="p-4 border border-purple-200 rounded bg-purple-50">
-            <h3 className="font-semibold text-purple-800">
+          <div className="p-3 md:p-4 border border-purple-200 rounded bg-purple-50">
+            <h3 className="font-semibold text-purple-800 text-sm md:text-base">
               Long-term Transformation (5-10 years)
             </h3>
-            <ul className="pl-5 mt-2 space-y-1">
+            <ul className="pl-3 md:pl-5 mt-1 md:mt-2 space-y-1 text-xs md:text-sm">
               <li>
                 • Complete network of rural medical education institutions
               </li>
@@ -646,7 +735,6 @@ function SolutionsPage() {
   );
 }
 
-// Data Page Component
 function DataPage() {
   const [healthData, setHealthData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -707,9 +795,9 @@ function DataPage() {
   };
 
   return (
-    <div className="space-y-8">
-      <section className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-blue-800">
+    <div className="space-y-4 md:space-y-8">
+      <section className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-blue-800">
           Healthcare Workforce Data
         </h2>
 
@@ -718,15 +806,15 @@ function DataPage() {
             <div className="text-blue-600">Loading healthcare data...</div>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             <div>
-              <h3 className="text-lg font-semibold mb-3">
+              <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
                 Doctor-to-Population Ratio by State
               </h3>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-xs md:text-sm text-gray-600 mb-2 md:mb-3">
                 Population per doctor (lower is better)
               </p>
-              <div className="h-72">
+              <div className="h-64 md:h-72">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={prepareRatioData()}
@@ -745,12 +833,12 @@ function DataPage() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div>
-                <h3 className="text-lg font-semibold mb-3">
+                <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
                   Vacancy Rates (%)
                 </h3>
-                <div className="h-64">
+                <div className="h-56 md:h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={prepareVacancyData()}
@@ -773,10 +861,10 @@ function DataPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-3">
+                <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
                   Workforce Shortages (thousands)
                 </h3>
-                <div className="h-64">
+                <div className="h-56 md:h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={prepareShortageData()}
@@ -798,9 +886,9 @@ function DataPage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 p-4 rounded-md text-sm">
+            <div className="bg-blue-50 p-3 md:p-4 rounded-md text-xs md:text-sm">
               <p className="font-semibold text-blue-800">Data Sources:</p>
-              <ul className="list-disc pl-5">
+              <ul className="list-disc pl-4 md:pl-5">
                 <li>
                   Physician density data from World Bank API (
                   <a
@@ -830,21 +918,22 @@ function DataPage() {
   );
 }
 
-// Component for expandable sections
 function ExpandableSection({ title, children }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="border-b border-gray-200 py-3">
+    <div className="border-b border-gray-200 py-2 md:py-3">
       <button
-        className="flex justify-between items-center w-full text-left font-semibold text-blue-700"
+        className="flex justify-between items-center w-full text-left font-semibold text-blue-700 text-sm md:text-base"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         {title}
         {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
       </button>
 
-      {isExpanded && <div className="mt-3 pl-2">{children}</div>}
+      {isExpanded && (
+        <div className="mt-2 md:mt-3 pl-1 md:pl-2">{children}</div>
+      )}
     </div>
   );
 }
@@ -875,7 +964,7 @@ function RealTimeDataChart() {
 
   if (loading) {
     return (
-      <div className="h-56 flex items-center justify-center">
+      <div className="h-full flex items-center justify-center">
         <div className="text-blue-600">Loading physician density data...</div>
       </div>
     );
@@ -887,7 +976,7 @@ function RealTimeDataChart() {
   ];
 
   return (
-    <div className="h-72">
+    <div className="h-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
@@ -934,6 +1023,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Rural Healthcare Workforce
       </text>
@@ -952,6 +1042,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Working Conditions
       </text>
@@ -970,6 +1061,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Workload per HCW
       </text>
@@ -988,6 +1080,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Urban Migration
       </text>
@@ -1006,6 +1099,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Quality of Healthcare
       </text>
@@ -1024,6 +1118,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Professional Isolation
       </text>
@@ -1042,6 +1137,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         dominantBaseline="middle"
         fontWeight="bold"
+        fontSize="12"
       >
         Government Incentives
       </text>
@@ -1054,7 +1150,14 @@ function CausalLoopDiagram() {
         markerEnd="url(#arrowhead)"
         strokeDasharray="5,3"
       />
-      <text x="380" y="250" textAnchor="end" fill="#d32f2f" fontWeight="bold">
+      <text
+        x="380"
+        y="250"
+        textAnchor="end"
+        fill="#d32f2f"
+        fontWeight="bold"
+        fontSize="12"
+      >
         -
       </text>
 
@@ -1071,6 +1174,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#d32f2f"
         fontWeight="bold"
+        fontSize="12"
       >
         -
       </text>
@@ -1088,6 +1192,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#d32f2f"
         fontWeight="bold"
+        fontSize="12"
       >
         +
       </text>
@@ -1105,11 +1210,11 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#d32f2f"
         fontWeight="bold"
+        fontSize="12"
       >
         -
       </text>
 
-      {/* R2: Healthcare Quality Loop */}
       <path
         d="M350 150 L200 350"
         stroke="#e65100"
@@ -1123,6 +1228,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#e65100"
         fontWeight="bold"
+        fontSize="12"
       >
         +
       </text>
@@ -1141,6 +1247,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#e65100"
         fontWeight="bold"
+        fontSize="12"
       >
         -
       </text>
@@ -1152,7 +1259,14 @@ function CausalLoopDiagram() {
         fill="none"
         markerEnd="url(#arrowhead)"
       />
-      <text x="470" y="90" textAnchor="middle" fill="#2e7d32" fontWeight="bold">
+      <text
+        x="470"
+        y="90"
+        textAnchor="middle"
+        fill="#2e7d32"
+        fontWeight="bold"
+        fontSize="12"
+      >
         -
       </text>
 
@@ -1169,6 +1283,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#2e7d32"
         fontWeight="bold"
+        fontSize="12"
       >
         -
       </text>
@@ -1186,6 +1301,7 @@ function CausalLoopDiagram() {
         textAnchor="middle"
         fill="#5e35b1"
         fontWeight="bold"
+        fontSize="12"
       >
         +
       </text>
@@ -1219,6 +1335,7 @@ function CausalLoopDiagram() {
         dominantBaseline="middle"
         fill="white"
         fontWeight="bold"
+        fontSize="12"
       >
         R1
       </text>
@@ -1239,6 +1356,7 @@ function CausalLoopDiagram() {
         dominantBaseline="middle"
         fill="white"
         fontWeight="bold"
+        fontSize="12"
       >
         R2
       </text>
@@ -1259,6 +1377,7 @@ function CausalLoopDiagram() {
         dominantBaseline="middle"
         fill="white"
         fontWeight="bold"
+        fontSize="12"
       >
         B1
       </text>
