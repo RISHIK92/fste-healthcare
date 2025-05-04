@@ -887,7 +887,7 @@ function RealTimeDataChart() {
   ];
 
   return (
-    <div className="h-56">
+    <div className="h-72">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
@@ -909,7 +909,7 @@ function RealTimeDataChart() {
           <Bar dataKey="value" name="Physician Density" fill="#3b82f6" />
         </BarChart>
       </ResponsiveContainer>
-      <p className="text-sm text-gray-600 mt-2">
+      <p className="text-xs text-gray-600">
         Latest data from World Bank: {physicianDensity} physicians per 1,000
         people
       </p>
